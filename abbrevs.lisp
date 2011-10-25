@@ -1,4 +1,4 @@
-(in-package :abbrevs.atomic-processes)
+(in-package :sigma&K)
 
 (define-symbol-macro +eps0+ physics-constants:+free-space-permittivity-SP+)
 (define-symbol-macro +a0+ physics-constants:+bohr-radius-SP+)

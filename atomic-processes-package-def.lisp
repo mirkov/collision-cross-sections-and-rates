@@ -1,6 +1,6 @@
 (defpackage :collision-cross-sections-and-rates
-  (:nicknames :K)
-  (:use :cl :my-utils :physics-constants)
+  (:nicknames :sigma&K)
+  (:use :cl :my-utils :physics-constants :lisp-unit)
   (:export
    :el+ar-ellastic
    :el+ar->2el+ar^+
@@ -13,6 +13,10 @@
    :e+Ar-ellastic-rate
    :Td))
 
+
+(defpackage :sigma&K-user
+  (:use :cl :sigma&K :mv-gnuplot))
+#|
 
 (defpackage :abbrevs.atomic-processes
   (:use :cl :physics-constants)
@@ -31,3 +35,5 @@
 
 (defpackage :hbs-Ar-unit-tests.atomic-processes
   (:use :cl :lisp-unit :mv-gnuplot :hbs-Ar.atomic-processes))
+
+|#

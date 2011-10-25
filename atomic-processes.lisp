@@ -1,4 +1,4 @@
-(in-package :atomic-processes)
+(in-package :sigma&K)
 
 
 
@@ -27,29 +27,46 @@ mr - reduced mass [kg]
 Lieberman & Lichtenberg 2nd ed, (eq 3.3.15)"
   (sqrt (/ (* pi alpha-p (^2 q))
 	   (* +eps0+ mr))))
+
+
+(define-test alpha-r
+  (let ((lisp-unit:*epsilon* 1e-2))
+    ;; compare value quoted in Lieberman with one calculated from CRC
+    ;; HCP, 79th Ed, p. 10-162
+    (assert-number-equal 11.06
+			 (alpha-r 1.6411e-30))))
+
+(defun alpha-r (alpha)
+  "Calculate relative polarizability from absolute polarizability
+`alpha'
+
+`alpha' is in units m^-3"
+  (/ alpha (expt +a0+ 3)))
+
+
 	   
 
 ;; Polarizability values (L&L Table 3.2 quoting Smirnov, 1981) in
-;; units of 1/bohr-radius^.
+;; units of 1/bohr-radius^ and from other sources
 ;; 
-;; Usage example (cdr (assoc 'Ar *alpha-r*))
+;; Usage example (assoc 'Ar *alpha-r*)
 (defparameter *alpha-r*
-  (list 
-   (cons :H 4.5)
-   (cons :C 12.)
-   (cons :N 7.5)
-   (cons :O 5.4)
-   (cons :Ar 11.08)
-   (cons :C-Cl4 69.)
-   (cons :C-F4 19.)
-   (cons :C-O 13.2)
-   (cons :C-O2 17.5)
-   (cons :Cl2 31.)
-   (cons :H2-O 9.8)
-   (cons :N-H3 14.8)
-   (cons :O2 10.6)
-   (cons :S-F6 30.))
-  "Relative polarizabilities")
+  `((:H . 4.5)
+    (:C . 12.)
+    (:N . 7.5)
+    (:O . 5.4)
+    (:Ar . 11.08)
+    (:Xe . ,(alpha-r 4.044e-30))
+    (:C-Cl4 . 69.)
+    (:C-F4 . 19.)
+    (:C-O . 13.2)
+    (:C-O2 . 17.5)
+    (:Cl2 . 31.)
+    (:H2-O . 9.8)
+    (:N-H3 . 14.8)
+    (:O2 . 10.6)
+    (:S-F6 . 30.))
+  "Relative polarizabilities obtained from L&L, Table 3.2 and CRC Handbook of Chemistry and Physics, 79th Edition, p. 10-162")
 
 (defun rel-polarizability (id)
   "relative molecule polarizability.  Usage: (rel-polarizability :ar)"
@@ -80,47 +97,4 @@ Smirnov, Appendix 9")
 		  (error "~a not found" id)))
      1e-19))
   
-
-(defun ar-drift-velocity (Td)
-  "Argon drift velocity fit by Phelps and Petrovic as function of E/n in Townsends
-http://jilawww.colorado.edu/~avp/collision_data/ionneutral/iontrans.txt"
-  (/ (* 4d0 Td)
-     (expt (+ 1d0
-	      (expt (* 0.007d0 Td) 1.5d0))
-	   0.33d0)))
-
-(defun ar-ion-neutral-coll-freq (Td n)
-  "Argon ion-neutral collision frequency Derived from the
-experimentally obtained ar-drift velocity.  See notes in
-ar-drift-velocity."
-  (* (/ +e+ (* 40 +mp+))
-     2.5d-22 n (expt (1+ (expt (* 7d-3 Td)
-			1.5d0))
-		     0.33d0)))
-
-
-
-(defun e+Ar-ellastic-rate (Te)
-  "Electron ion ellastic collision rate.
-LL2 -- Table 3.3.
-Original data: Gudmundsson 2002.  See References in LL2"
-  (assert (and (> Te 1.0)
-	       (< Te 7.0))
-	  (Te) "Te must be in the rage 1 - 7eV" Te)
-  (the float
-    (* 2.336e-14
-       (expt Te 1.609)
-       (exp (- (* 0.0618 (^2 (log Te)))
-	       (* 0.1171 (^3 (log Te))))))))
-
-
-(defun el+ar->2el+ar^+ (Te)
-  "Electron-Argon ionization rate
-LL2 -- Table 3.3.
-Original data: Gudmundsson 2002.  See References in LL2"
-  (assert (or (> Te 1.0)
-	    (< Te 7.0))
-	  (Te) "Te must be in the rage 1 - 7eV" Te)
-  (* 2.34e-14 (expt Te 0.59) (exp (0- (/ 17.44 Te)))))
-
 

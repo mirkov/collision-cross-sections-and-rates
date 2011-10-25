@@ -1,0 +1,5 @@
+2011-10-25  Mirko Vukovic  <Mirko Vukovic <mirko.vukovic@us.tel.com>>
+
+	* atomic-processes.lisp (*alpha-r*): Changed list format from
+	plain list to dotted list.  This will affect the calls
+

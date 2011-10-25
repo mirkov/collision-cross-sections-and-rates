@@ -1,0 +1,6 @@
+#+title: Common Lisp library for calculating atomic cross-sections, rates, and related quantities
+
+The library contains routines and utilities for calculating
+electron-atom, electron-ion, atom/molecule-ion cross-sections and
+rates from compiled data (not ab-initio)
+

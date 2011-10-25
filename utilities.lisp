@@ -1,4 +1,4 @@
-(in-package :utilities.atomic-processes)
+(in-package :sigma&K)
 
 (defun m* (m1 m2)
   (/ (* m1 m2)
@@ -22,3 +22,8 @@ p. 21"
 	   (expt (/ (- (* a x) a)
 		    (+ (* a x) 1d0))
 		 c)))))
+
+(defun K-arrhenius (Te C1 C2 &optional (C3 0))
+  "Evaluate
+C1 * Te^C3 (exp (- Te / C2 ) )"
+  (* C1 (expt Te C3) (exp (- (/ C2 Te)))))
