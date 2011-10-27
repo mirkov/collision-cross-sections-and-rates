@@ -1,6 +1,10 @@
 (defpackage :collision-cross-sections-and-rates
   (:nicknames :sigma&K)
-  (:use :cl :my-utils :physics-constants :lisp-unit)
+  (:use :cl :my-utils :physics-constants :lisp-unit
+	:mv-grid
+	:mv-gnuplot)
+  (:import-from :alexandria
+		:with-input-from-file)
   (:export
    :el+ar-ellastic
    :el+ar->2el+ar^+

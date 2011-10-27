@@ -29,9 +29,13 @@
 			   (:file "hbs-Ar-cross-sections")
 			   (:file "hbs-Ar-cross-sections-unit-tests")
 			   (:file "argon-ion-neutral"))))
-    :depends-on (:my-utils
+    :depends-on (:alexandria
+		 :gsll
+		 :lisp-unit
 		 :physics-constants
-		 :lisp-unit))
+		 :mv-grid-utils
+		 :mv-gnuplot
+		 :my-utils))
 
 
 (asdf:defsystem collision-cross-sections-and-rates-user
