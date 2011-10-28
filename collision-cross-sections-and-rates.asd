@@ -18,7 +18,10 @@
 	      :pathname #p"./"
 	      :depends-on ("common")
 	      :components
-	      ((:file "atomic-processes")))
+	      ((:file "atomic-processes")
+	       (:file "phelps-data")
+	       (:file "edfs")
+	       (:file "rate-calculations")))
      (:module "argon"
 	      :depends-on ("base")
 	      :serial t
@@ -28,7 +31,8 @@
 			   (:file "argon-rates")
 			   (:file "hbs-Ar-cross-sections")
 			   (:file "hbs-Ar-cross-sections-unit-tests")
-			   (:file "argon-ion-neutral"))))
+			   (:file "argon-ion-neutral")
+			   (:file "electron-argon--phelps"))))
     :depends-on (:alexandria
 		 :gsll
 		 :lisp-unit
