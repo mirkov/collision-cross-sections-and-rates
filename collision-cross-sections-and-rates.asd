@@ -32,7 +32,12 @@
 			   (:file "hbs-Ar-cross-sections")
 			   (:file "hbs-Ar-cross-sections-unit-tests")
 			   (:file "argon-ion-neutral")
-			   (:file "electron-argon--phelps"))))
+			   (:file "electron-argon--phelps")))
+     (:module "xenon"
+	      :depends-on ("base")
+	      :serial t
+	      :components ((:file "xenon-setup.lisp")
+			   (:file "electron-xenon--phelps"))))
     :depends-on (:alexandria
 		 :gsll
 		 :lisp-unit
