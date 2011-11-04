@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-03 15:46:35EDT rate-calculations.lisp>
+;; Time-stamp: <2011-11-04 10:11:22EDT rate-calculations.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -121,3 +121,43 @@ gsll:make-interpolation"
   (foo x y)
   (foo u v))
 |#
+
+(defun rate-table (sigma-interpolation &key (edf :maxwell)
+		   (T-min 0.1d0) (T-max 100d0) (count 101))
+  "Create a rate interpolation table for cross-sections
+defined by the `sigma-interpolation' list.
+
+The table is returned as a 2D grid with Te in the first column, and K
+in the second.
+
+The electron distribution is specified by the keyword `edf' and
+defaults to :maxwell.  In principle, it can accept keywords such
+as :dryvestein (although that edf is not implemented yet)
+
+The tabulation is done on a log-sequence of `count' points between
+`T-min' and `T-max'"
+  (let* ((Tes (gseq T-min T-max count))
+	 (table (grid:make-grid `((grid:foreign-array ,count 2) double-float))))
+    (dotimes (i count)
+      (let ((Te (gref Tes i)))
+	(setf (gref table i 0) Te
+	      (gref table i 1)
+	      (calc-rate sigma-interpolation edf Te))))
+    table))
+
+(defun print-rate-table (Te/K-table &optional (stream t))
+  "Print the rate table (a 2D grid) in a three column format where
+each row contains the row index, Te value and K value
+
+The first emitted line is the number of rows."
+  (let ((count (dim0 Te/K-table)))
+    (prin1 count stream)
+    (dotimes (i count)
+      (print i stream)
+      (prin1 (grid:gref Te/K-table i 0) stream)
+      (write-char #\space stream)
+      (prin1 (* 1e20 (grid:gref Te/K-table i 1)) stream))))
+
+(defun write-rate-table-to-file (table file)
+  (with-output-to-file (stream file :if-exists :supersede)
+    (print-rate-table table stream)))

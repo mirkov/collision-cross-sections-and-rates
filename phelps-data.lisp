@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-03 17:24:12EDT phelps-data.lisp>
+;; Time-stamp: <2011-11-04 12:25:03EDT phelps-data.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -71,7 +71,7 @@ consists of
        (if (<= coll-e e-min) 0d0
 	   (gsll:evaluate method coll-e :xa e :ya sigma)))))
 
-(defmacro def-ratecalc-method (name interpolation-data)
+(defmacro def-Kinterpol-method (name model interpolation-data)
   "Define a method `name' for interpolating `interpolation-data'
 
 `interpolation-data' is a list created by `setup-interpolation'.  It
@@ -81,5 +81,31 @@ consists of
 - cross-section (m2)
 - minimum energy
 - maximum energy"
+  `(defmethod ,name ((model (eql ,model)) Te)
+     (destructuring-bind (method Te-arr sigma-arr Te-min Te-max)
+	 ,interpolation-data
+       (assert (and (>= Te Te-min)
+		    (<= Te Te-max))
+	       ()
+	       "Collision energy ~a is outside the tabulated range ~a -- ~a"
+	       Te Te-min Te-max)
+       (gsll:evaluate method Te :xa Te-arr :ya sigma-arr))))
+
+(defmacro def-ratecalc-method (name interpolation-data)
+  "Define a method `name' for interpolating `interpolation-data'
+
+`interpolation-data' is a list created by `setup-interpolation'.
+It consists of
+- a GSLL interpolation object
+- energy scale (in eV)
+- cross-section (m2)
+- minimum energy
+- maximum energy
+
+The defined method accepts the following arguments:
+`model' -- such as :phelps
+`edf' -- such as :maxwell or :dryvestein (latter not implemente yet
+`temp' -- temperature in eV"
   `(defmethod ,name ((model (eql :phelps)) edf temp)
        (calc-rate ,interpolation-data edf temp)))
+

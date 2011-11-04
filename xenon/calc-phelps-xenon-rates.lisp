@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-03 17:49:14EDT calc-phelps-xenon-rates.lisp>
+;; Time-stamp: <2011-11-04 12:26:50EDT calc-phelps-xenon-rates.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -23,69 +23,32 @@
 ;; - save rates as table
 ;; - reade tables and set-up interpolation methods
 
+(defun write-phelps-xenon-rates (sigma-interpolation filename)
+  "Calculate a rate table for `sigma-interpolation' and write to
+`filename' in the `*Xe-data-dir*'"
+  (let* ((table (rate-table sigma-interpolation))
+	 (*default-pathname-defaults* *Xe-data-dir*))
+    (write-rate-table-to-file table filename)))
 
-
-
-
-
-(defun write-rates1 (stream Te K)
-  (let ((dim-Te (grid:dim0 Te))
-	(dim-K (grid:dim0 K)))
-    (assert (= dim-Te dim-K)
-	    () "Vectors must be of same length")
-    (prin1 dim-Te stream)
-    (dotimes (i dim-Te)
-      (print i stream)
-      (prin1 (grid:gref Te i) stream)
-      (write-char #\space stream)
-      (prin1 (grid:gref K i) stream))))
-
-
-(defun write-rates (cross-section-table &optional (stream t))
-  (let* ((Te (gseq 0.1d0 100d0 101))
-	 (K (gcmap (calc-rate cross-section-table :maxwell @!temp)
-		   Te))
-	 (K1 (gmap (lambda (K)
-		     (* 1e20 K))
-		   K)))
-    (write-rates1 stream Te K1)))
 
 #|
-(progn
-  (write-rates *phelps-xe+e->qm-ell* "K-Xe+e->Qm-ell.dat")
-  (write-rates *phelps-xe+e->qm-tot* "K-Xe+e->Qm-tot.dat"))
-(write-rates *phelps-xe+e->ion* "K-Xe+e->ion.dat")
-(write-rates *phelps-xe+e->exc* "K-Xe+e->exc.dat")
+(write-phelps-xenon-rates *phelps-xe+e->qm* "K-Xe+e->Qm.dat")
+(write-phelps-xenon-rates *phelps-xe+e->ion* "K-Xe+e->ion.dat")
+(write-phelps-xenon-rates *phelps-xe+e->exc* "K-Xe+e->exc.dat")
 |#
 
-  
-  
+(defmacro cleanup-xe-rate-data ()
+`(progn
+   (unintern '*K-Xe+e->Qm*)
+   (unintern '*K-Xe+e->ion*)
+   (unintern '*K-Xe+e->exc*)))
 
-(defvar *K-Xe+e->Qm-tot*
+(defvar *K-Xe+e->Qm*
   (setup-interpolation
-   (merge-pathnames "K-Xe+e->Qm-tot.dat"
+   (merge-pathnames "K-Xe+e->Qm.dat"
 		    *Xe-data-dir*))
   "Interpolation data for electron-xenon momentum transfer rate for
 Maxwellian electrons
-
-The data was obtained by integration of Phelps' recommended 
-cross-sections")
-
-(defvar *K-Xe+e->Qm-ell*
-  (setup-interpolation
-   (merge-pathnames "K-Xe+e->Qm-ell.dat"
-		    *Xe-data-dir*))
-  "Interpolation data for electron-xenon momentum transfer rate for
-Maxwellian electrons
-
-The data was obtained by integration of Phelps' recommended 
-cross-sections")
-
-(defvar *K-Xe+e->ion*
-  (setup-interpolation
-   (merge-pathnames "K-Xe+e->ion.dat"
-		    *Xe-data-dir*))
-  "Interpolation data for xenon ionization for Maxwellian electrons
 
 The data was obtained by integration of Phelps' recommended 
 cross-sections")
@@ -100,23 +63,36 @@ electrons
 The data was obtained by integration of Phelps' recommended 
 cross-sections")
 
+(defvar *K-Xe+e->ion*
+  (setup-interpolation
+   (merge-pathnames "K-Xe+e->ion.dat"
+		    *Xe-data-dir*))
+  "Interpolation data for xenon ionization for Maxwellian electrons
+
+The data was obtained by integration of Phelps' recommended 
+cross-sections")
+
+
+
 (defun plot-xenon+e-rates ()
   "Plot of xenon+e maxwellian electron rates as function of
 temperature
 
 It reproduces Fig. 3.16 of L&L"
   (let* ((Te (second *K-Xe+e->ion*))
-	 (K-Qm-ell (third *K-Xe+e->qm-ell*))
-	 (K-Qm-tot (third *K-Xe+e->qm-tot*))
+	 (K-Qm (third *K-Xe+e->qm*))
 	 (K-exc (third *K-Xe+e->exc*))
 	 (K-ion (third *K-Xe+e->ion*)))
     (set-to ((logscale :xy)
 	     (xlabel "Te")
 	     (ylabel "m^3/s")
-	     (title "Maxwellian electron momentum transfer rate")
+	     (title "Electron-Xenon rates for Maxwellian electrons")
 	     (xrange '(.1 100))
 	     (yrange '(1e-18 1e-12)))
-      (plot-xys Te `((,K-Qm-ell :title "Ellastic")
-		     (,K-Qm-tot :title "Total")
+      (plot-xys Te `((,K-Qm :title "Ellastic")
 		     (,K-exc :title "Excitation")
 		     (,K-ion :title "Ionization"))))))
+
+(def-Kinterpol-method K-Xe+e->Qm :Phelps-Maxwell *K-Xe+e->Qm*)
+(def-Kinterpol-method K-Xe+e->exc :Phelps-Maxwell *K-Xe+e->exc*)
+(def-Kinterpol-method K-Xe+e->ion :Phelps-Maxwell *K-Xe+e->ion*)
