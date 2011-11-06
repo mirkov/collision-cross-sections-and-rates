@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-04 12:23:39EDT calc-phelps-argon-rates.lisp>
+;; Time-stamp: <2011-11-05 22:05:45EDT calc-phelps-argon-rates.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 ;; - save rates as table
 ;; - reade tables and set-up interpolation methods
 
-
+(export '(energy-loss/Ar+))
 
 
 (defun plot-argon+e->momentum ()
@@ -69,11 +69,11 @@ issue"
     (write-rate-table-to-file table filename)))
 
 #|
- (progn
-   (write-phelps-argon-rates *phelps-ar+e->qm-ell* "K-Ar+e->Qm-ell.dat")
-   (write-phelps-argon-rates *phelps-ar+e->qm-tot* "K-Ar+e->Qm-tot.dat"))
- (write-phelps-argon-rates *phelps-ar+e->ion* "K-Ar+e->ion.dat")
- (write-phelps-argon-rates *phelps-ar+e->exc* "K-Ar+e->exc.dat")
+(progn
+  (write-phelps-argon-rates *phelps-ar+e->qm-ell* "K-Ar+e->Qm-ell.dat")
+  (write-phelps-argon-rates *phelps-ar+e->qm-tot* "K-Ar+e->Qm-tot.dat")
+  (write-phelps-argon-rates *phelps-ar+e->ion* "K-Ar+e->ion.dat")
+  (write-phelps-argon-rates *phelps-ar+e->exc* "K-Ar+e->exc.dat"))
 |#
 
 (defmacro cleanup-Ar-rate-data ()
@@ -150,3 +150,10 @@ It reproduces Fig. 3.16 of L&L"
 (def-Kinterpol-method K-Ar+e->Qm-ell :Phelps-Maxwell *K-Ar+e->Qm-ell*)
 (def-Kinterpol-method K-Ar+e->exc :Phelps-Maxwell *K-Ar+e->exc*)
 (def-Kinterpol-method K-Ar+e->ion :Phelps-Maxwell *K-Ar+e->ion*)
+
+
+(defun energy-loss/Ar+ (Te)
+  (let ((Kion (K-Ar+e->ion :phelps-maxwell Te))
+	(Kexc (K-Ar+e->exc :phelps-maxwell Te))
+	(Km (K-Ar+e->Qm :phelps-maxwell Te)))
+    (energy-loss/ion Te (Eiz :Ar) Kion (Eexc :Ar) Kexc Km 40.0)))

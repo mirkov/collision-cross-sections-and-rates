@@ -12,6 +12,7 @@
    :sigma-l
    :K-l
    :rel-polarizability
+   :Eion :Eexc
    :polarizability
    :sigma-cx-res
    :ar-drift-velocity :ar-ion-neutral-coll-freq

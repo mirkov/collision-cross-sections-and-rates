@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-04 12:26:50EDT calc-phelps-xenon-rates.lisp>
+;; Time-stamp: <2011-11-04 16:34:36EDT calc-phelps-xenon-rates.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -22,6 +22,8 @@
 ;; - calculates Xenon rates by integrating reaction cross-sections
 ;; - save rates as table
 ;; - reade tables and set-up interpolation methods
+
+(export '(energy-loss/Xe+))
 
 (defun write-phelps-xenon-rates (sigma-interpolation filename)
   "Calculate a rate table for `sigma-interpolation' and write to
@@ -96,3 +98,9 @@ It reproduces Fig. 3.16 of L&L"
 (def-Kinterpol-method K-Xe+e->Qm :Phelps-Maxwell *K-Xe+e->Qm*)
 (def-Kinterpol-method K-Xe+e->exc :Phelps-Maxwell *K-Xe+e->exc*)
 (def-Kinterpol-method K-Xe+e->ion :Phelps-Maxwell *K-Xe+e->ion*)
+
+(defun energy-loss/Xe+ (Te)
+  (let ((Kion (K-Xe+e->ion :phelps-maxwell Te))
+	(Kexc (K-Xe+e->exc :phelps-maxwell Te))
+	(Km (K-Xe+e->Qm :phelps-maxwell Te)))
+    (energy-loss/ion Te (Eiz :Xe) Kion (Eexc :Xe) Kexc Km 131.29)))

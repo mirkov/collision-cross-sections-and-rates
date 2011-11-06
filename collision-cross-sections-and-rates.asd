@@ -37,8 +37,8 @@
      (:module "xenon"
 	      :depends-on ("base")
 	      :serial t
-	      :components ((:file "Xenon-generic")
-			   (:file "Xe-setup")
+	      :components ((:file "xenon-generic")
+			   (:file "xe-setup")
 			   (:file "electron-xenon--phelps")
 			   (:file "calc-phelps-xenon-rates"))))
     :depends-on (:alexandria

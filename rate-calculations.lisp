@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-04 10:11:22EDT rate-calculations.lisp>
+;; Time-stamp: <2011-11-05 22:04:51EDT rate-calculations.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -38,14 +38,13 @@ The normalization factor is derived in generic-works."
     (let* ((f-val (gmap #'(lambda (e)
 			    (funcall #'electron-edf edf e temp))
 			e))
-	   (integrand0 (grid:map-n-grids :sources
-					`((,e nil)
-					  (,sigma nil)
-					  (,f-val nil))
+	   (integrand (grid:map-n-grids :sources
+					(list (list e nil)
+					      (list sigma nil)
+					      (list f-val nil))
 					:combination-function
 					(lambda (e sigma f)
-					  (* e sigma f))))
-	   (integrand (grid:copy integrand0)))
+					  (* e sigma f)))))
       (let ((interp (gsll:make-interpolation
 		     gsll:+linear-interpolation+
 		     e integrand)))
@@ -53,7 +52,7 @@ The normalization factor is derived in generic-works."
 			   +electron-mass-sp+)
 			2d0)
 	   (gsll:evaluate-integral interp e-min e-max
-				:xa e :ya integrand))))))
+				   :xa e :ya integrand))))))
 
 #|
 (let ((data (read-single-level-excitation-data))
@@ -161,3 +160,13 @@ The first emitted line is the number of rows."
 (defun write-rate-table-to-file (table file)
   (with-output-to-file (stream file :if-exists :supersede)
     (print-rate-table table stream)))
+
+
+(defun energy-loss/ion (Te Eiz Kiz Eex Kex Kel M)
+  "Equation for energy loss for each ion created"
+  (/ (+ (* Eiz Kiz)
+	(* Eex Kex)
+	(* (/ (* 3 +electron-mass-sp+)
+	      (* M +proton-mass-sp+))
+	   Te Kel))
+     Kiz))

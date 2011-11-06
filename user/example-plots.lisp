@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-04 13:03:28EDT example-plots.lisp>
+;; Time-stamp: <2011-11-04 16:40:56EDT example-plots.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -65,3 +65,15 @@ It reproduces Fig. 3.16 of L&L"
 				  (K-Ar+e->ion :phelps-maxwell Te))
 			      :title "Ionization"))
 		    0.1001d0 99.99d0 120 t)))
+(defun plot-energy-loss-curves ()
+  "Generate plot of energy loss/ion created for Ar & Xe
+
+This replicates Figure 3.17, but for O for which I currently don't
+have implemented the rates"
+  (set-to ((logscale :xy)
+	   (xlabel "Te")
+	   (ylabel "eV")
+	   (title "Energy loss per ion created"))
+    (plot-funs `((energy-loss/ar+ :title "Ar")
+		 (energy-loss/Xe+ :title "Xe"))
+	       1d0 99.99d0 101 t)))

@@ -98,3 +98,29 @@ Smirnov, Appendix 9")
      1e-19))
   
 
+(defparameter *Eion*
+  `((:H . 13.598)
+    (:C . 11.260)
+    (:N . 14.534)
+    (:O . 13.618)
+    (:Ar . 15.760)
+    (:Xe . 12.130))
+  "Ionization potentials of atoms (Smirnov, Appendix 10 table)")
+
+(defun Eion (id)
+  "Ionization  potential  Usage: (Eion :ar)"
+  (or (cdr (assoc id
+		  *Eion*))
+      (error "~a not found" id)))
+
+
+(defparameter *Eexc*
+  `((:Ar . 11.5)
+    (:Xe . 8.32))
+  "Ionization treshold of atoms (Smirnov, Appendix 10 table)")
+
+(defun Eexc (id)
+  "Excitation treshold  Usage: (Eexc :ar)"
+  (or (cdr (assoc id
+		  *Eexc*))
+      (error "~a not found" id)))
