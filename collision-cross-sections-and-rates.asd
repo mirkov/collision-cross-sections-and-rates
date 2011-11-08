@@ -32,12 +32,15 @@
 			   (:file "hbs-Ar-cross-sections")
 			   (:file "hbs-Ar-cross-sections-unit-tests")
 			   (:file "argon-ion-neutral")
-			   (:file "electron-argon--phelps")))
+			   (:file "electron-argon--phelps")
+			   (:file "calc-phelps-argon-rates")))
      (:module "xenon"
 	      :depends-on ("base")
 	      :serial t
-	      :components ((:file "xenon-setup.lisp")
-			   (:file "electron-xenon--phelps"))))
+	      :components ((:file "xenon-generic")
+			   (:file "xe-setup")
+			   (:file "electron-xenon--phelps")
+			   (:file "calc-phelps-xenon-rates"))))
     :depends-on (:alexandria
 		 :gsll
 		 :lisp-unit
@@ -57,7 +60,8 @@
     ((:module "base"
 	      :pathname #p"./"
 	      :components ((:file "atomic-processes-package-def")))
-     (:module "argon"
-	      :components ((:file "hbs-Ar-corss-sections-unit-tests"))))
+     (:module "user-examples"
+	      :pathname #p"./user"
+	      :components ((:file "example-plots"))))
     :depends-on (:collision-cross-sections-and-rates
 		 :mv-gnuplot))

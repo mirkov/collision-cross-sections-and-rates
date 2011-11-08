@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-03 16:59:33EDT calc-argon-rates.lisp>
+;; Time-stamp: <2011-11-08 08:54:44 calc-phelps-argon-rates.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 ;; - save rates as table
 ;; - reade tables and set-up interpolation methods
 
-
+(export '(energy-loss/Ar+))
 
 
 (defun plot-argon+e->momentum ()
@@ -61,41 +61,29 @@ issue"
       (plot-xys Te `((,K1 :title "Excitation")
 		     (,K2 :title "Ionization"))))))
 
-(defun write-rates1 (filename Te K)
-  (alexandria:with-output-to-file
-      (stream (merge-pathnames filename
-			       *ar-data-dir*)
-	      :if-exists :supersede)
-    (let ((dim-Te (grid:dim0 Te))
-	  (dim-K (grid:dim0 K)))
-      (assert (= dim-Te dim-K)
-	      () "Vectors must be of same length")
-      (prin1 dim-Te stream)
-      (dotimes (i dim-Te)
-	(print i stream)
-	(prin1 (grid:gref Te i) stream)
-	(write-char #\space stream)
-	(prin1 (grid:gref K i) stream)))))
-
-
-(defun write-rates (cross-section-table filename)
-  (let* ((Te (gseq 0.1d0 100d0 101))
-	 (K (gcmap (calc-rate cross-section-table :maxwell @!temp)
-		   Te))
-	 (K1 (gmap (lambda (K)
-		     (* 1e20 K))
-		   K)))
-    (write-rates1 filename Te K1)))
+(defun write-phelps-argon-rates (sigma-interpolation filename)
+  "Calculate a rate table for `sigma-interpolation' and write to
+`filename' in the `*Xe-data-dir*'"
+  (let* ((table (rate-table sigma-interpolation))
+	 (*default-pathname-defaults* *Ar-data-dir*))
+    (write-rate-table-to-file table filename)))
 
 #|
 (progn
-  (write-rates *phelps-ar+e->qm-ell* "K-Ar+e--Qm-ell.dat")
-  (write-rates *phelps-ar+e->qm-tot* "K-Ar+e--Qm-tot.dat"))
-(write-rates *phelps-ar+e->ion* "K-Ar+e--ion.dat")
-(write-rates *phelps-ar+e->exc* "K-Ar+e--exc.dat")
+  (write-phelps-argon-rates *phelps-ar+e->qm-ell* "K-Ar+e--Qm-ell.dat")
+  (write-phelps-argon-rates *phelps-ar+e->qm-tot* "K-Ar+e--Qm-tot.dat")
+  (write-phelps-argon-rates *phelps-ar+e->ion* "K-Ar+e--ion.dat")
+  (write-phelps-argon-rates *phelps-ar+e->exc* "K-Ar+e--exc.dat"))
 |#
 
-  
+(defmacro cleanup-Ar-rate-data ()
+`(progn
+   (unintern '*K-Ar+e->Qm-tot*)
+   (unintern '*K-Ar+e->Qm-ell*)
+   (unintern '*K-Ar+e->ion*)
+   (unintern '*K-Ar+e->exc*)))
+
+#| (cleanup-ar-rate-data) |#
   
 
 (defvar *K-Ar+e->Qm-tot*
@@ -148,12 +136,27 @@ It reproduces Fig. 3.16 of L&L"
 	 (K-exc (third *K-Ar+e->exc*))
 	 (K-ion (third *K-Ar+e->ion*)))
     (set-to ((logscale :xy)
-	     (xlabel "Te")
-	     (ylabel "m^3/s")
-	     (title "Maxwellian electron momentum transfer rate")
+	     (xlabel "Te [Ev]")
+	     (ylabel "K [m^3/s]")
+	     (title "Electron Argon rates for Maxwellian electron")
 	     (xrange '(.1 100))
 	     (yrange '(1e-18 1e-12)))
       (plot-xys Te `((,K-Qm-ell :title "Ellastic")
 		     (,K-Qm-tot :title "Total")
 		     (,K-exc :title "Excitation")
 		     (,K-ion :title "Ionization"))))))
+<<<<<<< HEAD
+=======
+
+(def-Kinterpol-method K-Ar+e->Qm :Phelps-Maxwell *K-Ar+e->Qm-tot*)
+(def-Kinterpol-method K-Ar+e->Qm-ell :Phelps-Maxwell *K-Ar+e->Qm-ell*)
+(def-Kinterpol-method K-Ar+e->exc :Phelps-Maxwell *K-Ar+e->exc*)
+(def-Kinterpol-method K-Ar+e->ion :Phelps-Maxwell *K-Ar+e->ion*)
+
+
+(defun energy-loss/Ar+ (Te)
+  (let ((Kion (K-Ar+e->ion :phelps-maxwell Te))
+	(Kexc (K-Ar+e->exc :phelps-maxwell Te))
+	(Km (K-Ar+e->Qm :phelps-maxwell Te)))
+    (energy-loss/ion Te (Eiz :Ar) Kion (Eexc :Ar) Kexc Km 40.0)))
+>>>>>>> 7d4267e07e7f20c56494d8f9062dcfb988cc6591

@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-03 17:21:15EDT Xe-setup.lisp>
+;; Time-stamp: <2011-11-04 12:29:14EDT xenon-generic.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -17,9 +17,18 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(defvar *xe-data-dir*
-  (merge-pathnames
-   #P"my-software-add-ons/my-lisp/modeling/collision-cross-sections-and-rates/xenon/"
-   #+WTEHCFMXYP1 #p"/home/977315/"
-   #+CYSSHD1 #P"/home/mv/")
-  "Path to the Xenon data directory")
+(in-package :sigma&k)
+
+(export '(K-Xe+e->Qm K-Xe+e->exc K-Xe+e->ion))
+
+(defgeneric K-Xe+e->Qm (model Te)
+  (:documentation "Electron - Xenon total momentum transfer
+collision rate"))
+
+(defgeneric K-Xe+e->exc (model Te)
+  (:documentation "Electron - Xenon effective excitation rate"))
+
+(defgeneric K-Xe+e->ion (model Te)
+  (:documentation "Electron - Xenon ionization rate"))
+
+

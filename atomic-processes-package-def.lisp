@@ -1,16 +1,18 @@
 (defpackage :collision-cross-sections-and-rates
   (:nicknames :sigma&K)
   (:use :cl :my-utils :physics-constants :lisp-unit
-	:mv-grid
+	:grid :mv-grid
 	:mv-gnuplot)
   (:import-from :alexandria
-		:with-input-from-file)
+		:with-output-to-file)
+  (:shadow :lisp-unit :norm)
   (:export
    :el+ar-ellastic
    :el+ar->2el+ar^+
    :sigma-l
    :K-l
    :rel-polarizability
+   :Eion :Eexc
    :polarizability
    :sigma-cx-res
    :ar-drift-velocity :ar-ion-neutral-coll-freq
