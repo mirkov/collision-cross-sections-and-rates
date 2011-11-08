@@ -89,10 +89,10 @@ issue"
 
 #|
 (progn
-  (write-rates *phelps-ar+e->qm-ell* "K-Ar+e->Qm-ell.dat")
-  (write-rates *phelps-ar+e->qm-tot* "K-Ar+e->Qm-tot.dat"))
-(write-rates *phelps-ar+e->ion* "K-Ar+e->ion.dat")
-(write-rates *phelps-ar+e->exc* "K-Ar+e->exc.dat")
+  (write-rates *phelps-ar+e->qm-ell* "K-Ar+e--Qm-ell.dat")
+  (write-rates *phelps-ar+e->qm-tot* "K-Ar+e--Qm-tot.dat"))
+(write-rates *phelps-ar+e->ion* "K-Ar+e--ion.dat")
+(write-rates *phelps-ar+e->exc* "K-Ar+e--exc.dat")
 |#
 
   
