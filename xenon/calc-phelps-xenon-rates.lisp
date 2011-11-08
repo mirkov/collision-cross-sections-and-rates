@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-04 16:34:36EDT calc-phelps-xenon-rates.lisp>
+;; Time-stamp: <2011-11-08 08:59:01 calc-phelps-xenon-rates.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -34,9 +34,9 @@
 
 
 #|
-(write-phelps-xenon-rates *phelps-xe+e->qm* "K-Xe+e->Qm.dat")
-(write-phelps-xenon-rates *phelps-xe+e->ion* "K-Xe+e->ion.dat")
-(write-phelps-xenon-rates *phelps-xe+e->exc* "K-Xe+e->exc.dat")
+(write-phelps-xenon-rates *phelps-xe+e->qm* "K-Xe+e--Qm.dat")
+(write-phelps-xenon-rates *phelps-xe+e->ion* "K-Xe+e--ion.dat")
+(write-phelps-xenon-rates *phelps-xe+e->exc* "K-Xe+e--exc.dat")
 |#
 
 (defmacro cleanup-xe-rate-data ()
