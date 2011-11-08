@@ -37,8 +37,8 @@
      (:module "xenon"
 	      :depends-on ("base")
 	      :serial t
-	      :components ((:file "xenon-generic")
-			   (:file "xe-setup")
+	      :components ((:file "xe-setup")
+			   (:file "xenon-generic")
 			   (:file "electron-xenon--phelps")
 			   (:file "calc-phelps-xenon-rates"))))
     :depends-on (:alexandria
@@ -61,7 +61,7 @@
 	      :pathname #p"./"
 	      :components ((:file "atomic-processes-package-def")))
      (:module "user-examples"
-	      :pathname #p"./user"
+	      :pathname #p"./user/"
 	      :components ((:file "example-plots"))))
     :depends-on (:collision-cross-sections-and-rates
 		 :mv-gnuplot))

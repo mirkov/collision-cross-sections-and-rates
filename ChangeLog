@@ -1,3 +1,24 @@
+2011-11-08  Mirko Vukovic  <mirko.vukovic@us.tel.com>
+
+	* xenon/calc-phelps-xenon-rates.lisp (energy-loss/Xe+): Fixed bug.
+	Was calling Eiz instead of Eion
+
+	* argon/calc-phelps-argon-rates.lisp (energy-loss/Ar+): Fixed bug.
+	Was calling Eiz instead of Eion
+
+	* edfs.lisp (electron-edf): Maxwell: Using +pi+ instead of pi
+
+	* rate-calculations.lisp (rate-table, make-rate-table): renamed
+	"rate-table" into "make-rate-table"
+	(calc-rate): Using +pi+ instead of pi
+
+	* xenon/calc-phelps-xenon-rates.lisp (*K-Xe+e->exc*)
+	(*K-Xe+e->ion*, *K-Xe+e->Qm*): Fixed file names from "->" to "--"
+
+	* argon/calc-phelps-argon-rates.lisp (*K-Ar+e->Qm-ell*)
+	(*K-Ar+e->ion*, *K-Ar+e->exc*, *K-Ar+e->Qm-tot*): Fixed file names
+	from "->" to "--"
+
 2011-10-25  Mirko Vukovic  <Mirko Vukovic <mirko.vukovic@us.tel.com>>
 
 	* atomic-processes.lisp (*alpha-r*): Changed list format from

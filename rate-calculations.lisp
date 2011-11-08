@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-05 22:04:51EDT rate-calculations.lisp>
+;; Time-stamp: <2011-11-08 11:56:03 rate-calculations.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -32,6 +32,7 @@ function `edf' for given temperature `temp'
 Energy units are in electron volts
 
 The normalization factor is derived in generic-works."
+  (print 0)
   (destructuring-bind (method e sigma e-min e-max)
       interpolation-data
     (declare (ignore method))
@@ -48,7 +49,7 @@ The normalization factor is derived in generic-works."
       (let ((interp (gsll:make-interpolation
 		     gsll:+linear-interpolation+
 		     e integrand)))
-	(* 8d0 pi (expt (/ +elementary-charge-sp+
+	(* 8d0 +pi+ (expt (/ +elementary-charge-sp+
 			   +electron-mass-sp+)
 			2d0)
 	   (gsll:evaluate-integral interp e-min e-max
@@ -121,7 +122,7 @@ gsll:make-interpolation"
   (foo u v))
 |#
 
-(defun rate-table (sigma-interpolation &key (edf :maxwell)
+(defun make-rate-table (sigma-interpolation &key (edf :maxwell)
 		   (T-min 0.1d0) (T-max 100d0) (count 101))
   "Create a rate interpolation table for cross-sections
 defined by the `sigma-interpolation' list.

@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-03 17:24:41EDT electron-argon--phelps.lisp>
+;; Time-stamp: <2011-11-08 09:47:14 electron-argon--phelps.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 (defvar *phelps-Ar+e->Qm-tot*
   (setup-interpolation
-   (merge-pathnames "Ar+e--Qm-tot.dat"
+    (merge-pathnames "Ar+e--Qm-tot.dat"
 		    *Ar-data-dir*)))
 
 (defvar *phelps-Ar+e->Qm-ell*

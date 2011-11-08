@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-08 08:54:44 calc-phelps-argon-rates.lisp>
+;; Time-stamp: <2011-11-08 11:54:26 calc-phelps-argon-rates.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -64,7 +64,7 @@ issue"
 (defun write-phelps-argon-rates (sigma-interpolation filename)
   "Calculate a rate table for `sigma-interpolation' and write to
 `filename' in the `*Xe-data-dir*'"
-  (let* ((table (rate-table sigma-interpolation))
+  (let* ((table (make-rate-table sigma-interpolation))
 	 (*default-pathname-defaults* *Ar-data-dir*))
     (write-rate-table-to-file table filename)))
 
@@ -86,9 +86,9 @@ issue"
 #| (cleanup-ar-rate-data) |#
   
 
-(defvar *K-Ar+e->Qm-tot*
+(defparameter *K-Ar+e->Qm-tot*
   (setup-interpolation
-   (merge-pathnames "K-Ar+e->Qm-tot.dat"
+   (merge-pathnames "K-Ar+e--Qm-tot.dat"
 		    *Ar-data-dir*))
   "Interpolation data for electron-argon momentum transfer rate for
 Maxwellian electrons
@@ -96,9 +96,9 @@ Maxwellian electrons
 The data was obtained by integration of Phelps' recommended 
 cross-sections")
 
-(defvar *K-Ar+e->Qm-ell*
+(defparameter *K-Ar+e->Qm-ell*
   (setup-interpolation
-   (merge-pathnames "K-Ar+e->Qm-ell.dat"
+   (merge-pathnames "K-Ar+e--Qm-ell.dat"
 		    *Ar-data-dir*))
   "Interpolation data for electron-argon momentum transfer rate for
 Maxwellian electrons
@@ -106,18 +106,18 @@ Maxwellian electrons
 The data was obtained by integration of Phelps' recommended 
 cross-sections")
 
-(defvar *K-Ar+e->ion*
+(defparameter *K-Ar+e->ion*
   (setup-interpolation
-   (merge-pathnames "K-Ar+e->ion.dat"
+   (merge-pathnames "K-Ar+e--ion.dat"
 		    *Ar-data-dir*))
   "Interpolation data for argon ionization for Maxwellian electrons
 
 The data was obtained by integration of Phelps' recommended 
 cross-sections")
 
-(defvar *K-Ar+e->exc*
+(defparameter *K-Ar+e->exc*
   (setup-interpolation
-   (merge-pathnames "K-Ar+e->exc.dat"
+   (merge-pathnames "K-Ar+e--exc.dat"
 		    *Ar-data-dir*))
   "Interpolation data for argon excitation rate for Maxwellian
 electrons
@@ -145,18 +145,14 @@ It reproduces Fig. 3.16 of L&L"
 		     (,K-Qm-tot :title "Total")
 		     (,K-exc :title "Excitation")
 		     (,K-ion :title "Ionization"))))))
-<<<<<<< HEAD
-=======
 
 (def-Kinterpol-method K-Ar+e->Qm :Phelps-Maxwell *K-Ar+e->Qm-tot*)
 (def-Kinterpol-method K-Ar+e->Qm-ell :Phelps-Maxwell *K-Ar+e->Qm-ell*)
 (def-Kinterpol-method K-Ar+e->exc :Phelps-Maxwell *K-Ar+e->exc*)
 (def-Kinterpol-method K-Ar+e->ion :Phelps-Maxwell *K-Ar+e->ion*)
 
-
 (defun energy-loss/Ar+ (Te)
   (let ((Kion (K-Ar+e->ion :phelps-maxwell Te))
 	(Kexc (K-Ar+e->exc :phelps-maxwell Te))
 	(Km (K-Ar+e->Qm :phelps-maxwell Te)))
-    (energy-loss/ion Te (Eiz :Ar) Kion (Eexc :Ar) Kexc Km 40.0)))
->>>>>>> 7d4267e07e7f20c56494d8f9062dcfb988cc6591
+    (energy-loss/ion Te (Eion :Ar) Kion (Eexc :Ar) Kexc Km 40.0)))

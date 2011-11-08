@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-08 08:59:01 calc-phelps-xenon-rates.lisp>
+;; Time-stamp: <2011-11-08 11:54:56 calc-phelps-xenon-rates.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -28,7 +28,7 @@
 (defun write-phelps-xenon-rates (sigma-interpolation filename)
   "Calculate a rate table for `sigma-interpolation' and write to
 `filename' in the `*Xe-data-dir*'"
-  (let* ((table (rate-table sigma-interpolation))
+  (let* ((table (make-rate-table sigma-interpolation))
 	 (*default-pathname-defaults* *Xe-data-dir*))
     (write-rate-table-to-file table filename)))
 
@@ -47,7 +47,7 @@
 
 (defvar *K-Xe+e->Qm*
   (setup-interpolation
-   (merge-pathnames "K-Xe+e->Qm.dat"
+   (merge-pathnames "K-Xe+e--Qm.dat"
 		    *Xe-data-dir*))
   "Interpolation data for electron-xenon momentum transfer rate for
 Maxwellian electrons
@@ -57,7 +57,7 @@ cross-sections")
 
 (defvar *K-Xe+e->exc*
   (setup-interpolation
-   (merge-pathnames "K-Xe+e->exc.dat"
+   (merge-pathnames "K-Xe+e--exc.dat"
 		    *Xe-data-dir*))
   "Interpolation data for xenon excitation rate for Maxwellian
 electrons
@@ -67,7 +67,7 @@ cross-sections")
 
 (defvar *K-Xe+e->ion*
   (setup-interpolation
-   (merge-pathnames "K-Xe+e->ion.dat"
+   (merge-pathnames "K-Xe+e--ion.dat"
 		    *Xe-data-dir*))
   "Interpolation data for xenon ionization for Maxwellian electrons
 
@@ -103,4 +103,4 @@ It reproduces Fig. 3.16 of L&L"
   (let ((Kion (K-Xe+e->ion :phelps-maxwell Te))
 	(Kexc (K-Xe+e->exc :phelps-maxwell Te))
 	(Km (K-Xe+e->Qm :phelps-maxwell Te)))
-    (energy-loss/ion Te (Eiz :Xe) Kion (Eexc :Xe) Kexc Km 131.29)))
+    (energy-loss/ion Te (Eion :Xe) Kion (Eexc :Xe) Kexc Km 131.29)))

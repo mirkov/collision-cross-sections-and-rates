@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-08 11:29:43 edfs.lisp>
+;; Time-stamp: <2011-11-08 10:09:59 xe-setup.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -17,23 +17,11 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(in-package :sigma&k)
+(in-package :sigma&K)
 
-(defgeneric electron-edf (type energy temperature &rest rest)
-  (:documentation "Electron energy distribution function
-
-The distribution type is specified by a keyword such as :maxwell
-or :dryvestein or others
-
-function of `energy' (eV), `temperature' (eV) and other
-parameters"))
-
-(defmethod electron-edf ((type (eql :maxwell)) ev temp &rest rest)
-  "Maxwellian electron energy distribution function
-
-Based on L&L 18.1.2 converted to eV instead of velocity"
-  (declare (ignore rest))
-  (* (expt (/ +electron-mass-sp+
-	      (* 2 +pi+ +elementary-charge-sp+ temp))
-	   1.5)
-     (exp (- (/ eV  temp)))))
+(defvar *xe-data-dir*
+  (merge-pathnames
+   #P"my-software-add-ons/my-lisp/modeling/collision-cross-sections-and-rates/xenon/"
+   #+WTEHCFMXYP1 #p"/home/977315/"
+   #+CYSSHD1 #P"/home/mv/")
+  "Path to the Xenon data directory")

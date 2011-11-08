@@ -1,5 +1,5 @@
 ;; Mirko Vukovic
-;; Time-stamp: <2011-11-04 12:25:03EDT phelps-data.lisp>
+;; Time-stamp: <2011-11-08 10:12:30 phelps-data.lisp>
 ;; 
 ;; Copyright 2011 Mirko Vukovic
 ;; Distributed under the terms of the GNU General Public License
@@ -30,7 +30,10 @@
   (alexandria:with-input-from-file
       (stream file)
     (let ((rows (read stream)))
-  (read-grid `(,rows 3) stream t :eof-error-p t))))
+      (let (
+	    #+clisp (mv-grid:*array-type* 'mv-grid::foreign-array)
+		    )
+	(read-grid `(,rows 3) stream t :eof-error-p t)))))
 
 (defun setup-interpolation1 (e sigma e-min e-max)
   "Setup an interpolation method between e & sigma.  e-min and e-max
