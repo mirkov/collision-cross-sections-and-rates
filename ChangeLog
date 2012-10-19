@@ -1,3 +1,8 @@
+2011-11-10  Mirko Vukovic  <mirko.vukovic@us.tel.com>
+
+	* atomic-processes.lisp (*sigma-cx-res*): Added Xenon data from
+	Smirnov, p. 371
+
 2011-11-08  Mirko Vukovic  <mirko.vukovic@us.tel.com>
 
 	* xenon/calc-phelps-xenon-rates.lisp (energy-loss/Xe+): Fixed bug.

@@ -85,7 +85,8 @@ Lieberman & Lichtenberg 2nd ed, (eq 3.3.15)"
    (cons :C '(6.2 5.0))  ; same as H
    (cons :N '(4.9 2.8))
    (cons :O '(5.2 4.3))
-   (cons :Ar '(5.5 4.5)))
+   (cons :Ar '(5.5 4.5))
+   (cons :Xe '(9.1 7.5)))
   "Resonant charge exchange cross section at 0.1 and 10 eV in 10^-15 cm^2
 Smirnov, Appendix 9")
 

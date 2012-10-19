@@ -4,3 +4,16 @@ The library contains routines and utilities for calculating
 electron-atom, electron-ion, atom/molecule-ion cross-sections and
 rates from compiled data (not ab-initio)
 
+* Scaling of Phelps data
+
+  Phelps' cross-section data is in units of 1e-20m^2.  The data is
+  done as is, but is converted to units of m^ when doing the
+  interpolation (see [[file:phelps-data.lisp::(defun%20setup-interpolation%20(file)][here]]).
+
+  The rate calculation is done in these units as well using
+  [[file:rate-calculations.lisp::(defun%20make-rate-table%20(sigma-interpolation%20&key%20(edf%20:maxwell)][make-rate-table]].  But when the rates are written using
+  [[file:rate-calculations.lisp::(defun%20print-rate-table%20(Te/K-table%20&optional%20(stream%20t))][print-rate-table]], they are again normalized to 1e-20.
+
+  The reason why I normalize the rates is that I currently use the
+  same routine for reading the rates and the cross-sections.  I thus
+  have to use the same normalization procedure.
